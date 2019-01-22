@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<style>
+div {
+
+    position:absolute;             /* position in the center of the screen */
+    left:50%;
+    top:50%;
+    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+       margin: auto;  /* offset vertical: half of image height and text area height */
+                                   /* offset horizontal: half of text area width */
+
+
+  transform: translate(-50%, -50%);
+
+  border-style: groove;
+  border-color: blue;
+  border-radius: 8px;
+padding:10px;
+    text-align: center;
+	background:white;
+}
+a {
+
+    text-decoration: none;
+}
+
+body {
+
+    -webkit-touch-callout: none;                /* prevent callout to copy image, etc when tap to hold */
+    -webkit-text-size-adjust: none;             /* prevent webkit from resizing text to fit */
+    -webkit-user-select: none;                  /* prevent copy paste, to allow, change 'none' to 'text' */
+    background-color:#E4E4E4;
+    background-image:linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-ms-linear-gradient(top, #A7A7A7 0%, #E4E4E4 51%);
+    background-image:-webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #A7A7A7),
+        color-stop(0.51, #E4E4E4)
+    );
+    background-attachment:fixed;
+
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+
+</script>
+
+<body>
+<div id="instructiuni">
+<img src="mastermal.png" height="80" width="148"><br>
+<a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox">1. Install Mozilla Firefox</a><br>
+<a href="https://addons.mozilla.org/en-US/android/addon/tampermonkey/">2. Install Tampermonkey Add-on</a><br>
+<a href="https://greasyfork.org/en/scripts/32366-crunchyroll-html5">3. Install Crunchyroll HTML5 userscript</a><br>
+<a href="index.html"><img src="back.png" height="30" width="80"></a>
+</div>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<style>
+table,th,td {
+  border : 1px solid black;
+  border-collapse: collapse;
+}
+
+th,td {
+  padding: 5px;
+}
+
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #2e51a2;
+    color: white;
+}
+
+tr:hover {
+background-color: #ddd;
+}
+
+a {
+	color:darkblue;
+    text-decoration: none;
+}
+
+.id_cell{
+	color:navyblue;
+}
+
+.thumbnail {
+width:100px;
+height:150px;
+}
+
+.other{
+ visibility: hidden;
+ position:absolute;
+}
+
+.other2{
+ visibility: visible;
+ position:relative;
+ }
+
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+//             loading the JSON
+var xmlhttp = new XMLHttpRequest(); var fun;
+xmlhttp.open("GET", "json.json");
+xmlhttp.responseType='json';
+xmlhttp.send();
+xmlhttp.onload = function() {
+    fun=xmlhttp.response;
+	createTable(fun,columns,checkboxes);
+    //alert(fun.animedb.anime[1]["id"]);
+}
+
+var columns=["ID","Image","Title","Type","Episodes","Status","Aired","Premiered","Broadcast","Producers","Licensors","Studios","Source","Genres","Duration","Rating","Score","ScoreNumber","Ranked","Popularity","Members","Favorites"];
+var checkboxes=[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+var types=["number","other","string","list","number","list","other","list","other","string","string","string","list","string","string","list","number","number","number","number","number","number"];
+
+
+
+//             create the table
+function createTable(fun,columns,checkboxes){ //alert(document.getElementById("genreselect").value);
+  $("table").empty(); 
+  var i,j; j=0;
+  var table="<tr>";
+  
+  if (checkboxes[0]==1) {
+  table+="<th>"+columns[0]+"</th>"; 
+  }
+  
+  if (checkboxes[1]==1 && (document.getElementById("crunchy_c").checked==true || document.getElementById("crunchyro_c").checked==true)) 
+    {table+="<th>"+"Image"+"</th>";}
+
+  for(i=2;i<columns.length;i++) {
+   if (checkboxes[i]==1) {table+="<th>"+columns[i]+"</th>";}
+	   }
+	  table+="<tr>";
+
+  var cuc=(fun.animedb.anime.length/document.getElementById("perpage").value);
+  document.getElementById("maxpage").value=Math.ceil(cuc);
+  
+	var test1="";
+    var test2="";
+	var testprod=""; var testlic=""; var teststudio="";
+	var prod=""; var lic=""; var stud="";
+  //alert(test1.includes(test2));
+  //alert(document.getElementById("crunchy_c").checked);
+	
+  for (i = 0; i < fun.animedb.anime.length ; i++) {   
+	 test1=fun.animedb.anime[i]["title"]; test1=test1.toLowerCase();
+     test2=document.getElementById("search").value; test2=test2.toLowerCase();
+
+	 stud=fun.animedb.anime[i]["studios"]; stud=stud.toLowerCase();	 
+	 teststudio=document.getElementById("studiosearch").value; teststudio=teststudio.toLowerCase(); 
+	 
+	 lic=fun.animedb.anime[i]["licensors"]; lic=lic.toLowerCase();	 
+	 testlic=document.getElementById("licensorsearch").value; testlic=testlic.toLowerCase(); 
+	 
+	 prod=fun.animedb.anime[i]["producers"]; prod=prod.toLowerCase();	 
+	 testprod=document.getElementById("producersearch").value; testprod=testprod.toLowerCase(); 
+    //alert(stud+"+"+teststudio);
+
+	if(test1.includes(test2) && stud.includes(teststudio) && lic.includes(testlic) && prod.includes(testprod)){	
+	if((document.getElementById("crunchy_c").checked==false) || (document.getElementById("crunchy_c").checked==true && fun.animedb.anime[i].hasOwnProperty('crunchyUSA'))){
+	if((document.getElementById("crunchyro_c").checked==false) || (document.getElementById("crunchyro_c").checked==true && fun.animedb.anime[i].hasOwnProperty('crunchy'))){
+	if((document.getElementById("genreselect").value=="Any") || (document.getElementById("genreselect").value!="Any" && fun.animedb.anime[i].genres.includes(document.getElementById("genreselect").value))){
+	if((document.getElementById("statusselect").value=="Any") || (document.getElementById("statusselect").value!="Any" && fun.animedb.anime[i].status.includes(document.getElementById("statusselect").value))){
+	if(fun.animedb.anime[i].episodes=="Unknown" || (parseInt(fun.animedb.anime[i].episodes)>parseInt(document.getElementById("episodesmin").value) && parseInt(fun.animedb.anime[i].episodes)<parseInt(document.getElementById("episodesmax").value))){
+	if((document.getElementById("airedselect").value=="Any") || (document.getElementById("airedselect").value!="Any" && fun.animedb.anime[i].aired.includes(document.getElementById("airedselect").value))){
+	if((document.getElementById("sourceselect").value=="Any") || (document.getElementById("sourceselect").value!="Any" && fun.animedb.anime[i].source.includes(document.getElementById("sourceselect").value))){
+	if(fun.animedb.anime[i].score=="N/A" || (parseFloat(fun.animedb.anime[i].score)>parseFloat(document.getElementById("scoremin").value) && parseFloat(fun.animedb.anime[i].score)<parseInt(document.getElementById("scoremax").value))){
+	if(fun.animedb.anime[i].scorenumber=="N/A" || (parseInt(fun.animedb.anime[i].scorenumber)>parseInt(document.getElementById("scorenummin").value) && parseInt(fun.animedb.anime[i].scorenumber)<parseInt(document.getElementById("scorenummax").value))){
+if(fun.animedb.anime[i].ranked=="N/A" || (parseInt(fun.animedb.anime[i].ranked)>parseInt(document.getElementById("rankedmin").value) && parseInt(fun.animedb.anime[i].ranked)<parseInt(document.getElementById("rankedmax").value))){
+if(fun.animedb.anime[i].popularity=="N/A" || (parseInt(fun.animedb.anime[i].popularity)>parseInt(document.getElementById("popmin").value) && parseInt(fun.animedb.anime[i].popularity)<parseInt(document.getElementById("popmax").value))){
+if(fun.animedb.anime[i].members=="N/A" || (parseInt(fun.animedb.anime[i].members)>parseInt(document.getElementById("membermin").value) && parseInt(fun.animedb.anime[i].members)<parseInt(document.getElementById("membermax").value))){
+if(fun.animedb.anime[i].favorites=="N/A" || (parseInt(fun.animedb.anime[i].favorites)>parseInt(document.getElementById("favmin").value) && parseInt(fun.animedb.anime[i].favorites)<parseInt(document.getElementById("favmax").value))){
+
+	    table += "<tr>";
+	
+	
+	if(checkboxes[0]==1) table+="<td class='id_cell'>"+fun.animedb.anime[i]["id"].toString()+"</td>"; 
+	
+	if(checkboxes[1]==1 && (document.getElementById("crunchy_c").checked==true || document.getElementById("crunchyro_c").checked==true))
+	table+="<td><img class='thumbnail' src="+fun.animedb.anime[i]["imgurl"]+"></td>";	
+		
+	if(checkboxes[2]==1) {
+    table+="<td><a href='https://myanimelist.net/anime/"+fun.animedb.anime[i]["id"].toString()+"'>"+fun.animedb.anime[i]["title"]+"</a>";
+	if(fun.animedb.anime[i].hasOwnProperty('crunchyUSA')) table+='  <a href="https://myanimelist.net/anime/'+fun.animedb.anime[i]["id"].toString()+'/anime/video"><img src="us.png" height="15" width="25">  ';
+	if(fun.animedb.anime[i].hasOwnProperty('crunchy')) table+='  <a href="https://myanimelist.net/anime/'+fun.animedb.anime[i]["id"].toString()+'/anime/video"><img src="ro.png" height="15" width="25">  ';
+    table+="</td>";		
+	}
+	
+	for(j=3;j<checkboxes.length;j++) {
+	  if (checkboxes[j]==1)
+      table+="<td>"+fun.animedb.anime[i][columns[j].toLowerCase()]+"</td>";  
+	}
+	  table+="</tr>";
+	}}}}}}}}}}}}}}
+
+  }	 
+  document.getElementById("demo").innerHTML = table;
+  
+}
+
+//             checkbox toggling
+function toggleColumn(nom){
+  checkboxes[nom]=checkboxes[nom]+1;
+  if(checkboxes[nom]>1) checkboxes[nom]=0;
+  createTable(fun,columns,checkboxes);
+}
+
+function toggleBox(nom){
+document.getElementById(nom).click();
+}
+
+var visi=0;
+function filters(){
+if (visi==0)
+{
+document.getElementById("filters").style.visibility="visible"; 
+document.getElementById("filters").style.position="relative"; 
+visi=1;
+} else 
+{ 
+document.getElementById("filters").style.visibility="hidden"; 
+document.getElementById("filters").style.position="absolute"; 
+visi=0;
+}
+}
+
+
+</script>
+
+<body>
+<a href="index.html"><-Back</a>
+<input type="checkbox" class="check" id="id_c" onchange="toggleColumn(0)" checked> <a onclick="toggleBox('id_c')"> ID </a>
+<input type="checkbox" class="check" id="imgurl_c" onchange="toggleColumn(1)"> <a onclick="toggleBox('imgurl_c')"> Image </a>
+<input type="checkbox" class="check" id="title_c" onchange="toggleColumn(2)" checked> <a onclick="toggleBox('title_c')"> Title </a>
+<input type="checkbox" class="check" id="type_c" onchange="toggleColumn(3)"> <a onclick="toggleBox('type_c')"> Type </a>
+<input type="checkbox" class="check" id="episodes_c" onchange="toggleColumn(4)"> <a onclick="toggleBox('episodes_c')"> Episodes </a>
+<input type="checkbox" class="check" id="status_c" onchange="toggleColumn(5)"> <a onclick="toggleBox('status_c')"> Status </a>
+<input type="checkbox" class="check" id="aired_c" onchange="toggleColumn(6)"> <a onclick="toggleBox('aired_c')"> Aired </a>
+<input type="checkbox" class="check" id="premiered_c" onchange="toggleColumn(7)"> <a onclick="toggleBox('premiered_c')"> Premiered </a>
+<input type="checkbox" class="check" id="broadcast_c" onchange="toggleColumn(8)"> <a onclick="toggleBox('broadcast_c')"> Broadcast </a>
+<input type="checkbox" class="check" id="producers_c" onchange="toggleColumn(9)"> <a onclick="toggleBox('producers_c')"> Producers </a>
+<input type="checkbox" class="check" id="licensors_c" onchange="toggleColumn(10)"> <a onclick="toggleBox('licensors_c')"> Licensors </a>
+<input type="checkbox" class="check" id="studios_c" onchange="toggleColumn(11)"> <a onclick="toggleBox('studios_c')"> Studios </a>
+<input type="checkbox" class="check" id="source_c" onchange="toggleColumn(12)"> <a onclick="toggleBox('source_c')"> Source </a>
+<input type="checkbox" class="check" id="genres_c" onchange="toggleColumn(13)"> <a onclick="toggleBox('genres_c')"> Genres </a>
+<input type="checkbox" class="check" id="duration_c" onchange="toggleColumn(14)"> <a onclick="toggleBox('duration_c')"> Duration </a>
+<input type="checkbox" class="check" id="rating_c" onchange="toggleColumn(15)"> <a onclick="toggleBox('rating_c')"> Rating </a>
+<input type="checkbox" class="check" id="score_c" onchange="toggleColumn(16)"> <a onclick="toggleBox('score_c')"> Score </a>
+<input type="checkbox" class="check" id="scorenumber_c" onchange="toggleColumn(17)"> <a onclick="toggleBox('scorenumber_c')"> Score Number </a>
+<input type="checkbox" class="check" id="ranked_c" onchange="toggleColumn(18)"> <a onclick="toggleBox('ranked_c')"> Ranked </a>
+<input type="checkbox" class="check" id="popularity_c" onchange="toggleColumn(19)"> <a onclick="toggleBox('popularity_c')"> Popularity </a>
+<input type="checkbox" class="check" id="members_c" onchange="toggleColumn(20)"> <a onclick="toggleBox('members_c')"> Members </a>
+<input type="checkbox" class="check" id="favorites_c" onchange="toggleColumn(21)"> <a onclick="toggleBox('favorites_c')"> Favorites </a>
+
+<br><br>
+<input type="text" id="search"> Genre <select id="genreselect">
+<option value="Any">Any</option>
+<option value="Action">Action </option>
+<option value="Adventure">Adventure </option>
+<option value="Comedy">Comedy</option>
+<option value="Drama">Drama</option>
+<option value="Fantasy">Fantasy</option>
+<option value="Game">Game</option>
+<option value="Mystery">Mystery</option>
+<option value="Historical">Historical</option>
+<option value="Horror">Horror</option>
+<option value="Kids">Kids</option>
+<option value="Mecha">Mecha</option>
+<option value="Music">Music</option>
+<option value="Parody">Parody</option>
+<option value="Romance">Romance</option>
+<option value="Sci-Fi">Sci-Fi</option>
+<option value="Shoujo">Shoujo</option>
+<option value="Shounen">Shounen</option>
+<option value="Sports">Sports</option>
+<option value="Slice of Life">Slice of Life</option>
+<option value="Psychological">Psychological</option>
+<option value="Thriller">Thriller</option>
+</select> <input type="button" value="Search" onclick="createTable(fun,columns,checkboxes)"> <input type="checkbox" class="check" id="crunchy_c" onchange="toggleColumn(22)" checked> Has Crunchyroll  <img src="crunchy.png" height="20" width="20"> <input type="checkbox" class="check" id="crunchyro_c" onchange="toggleColumn(23)"> Watchable In <img src="ro.png" height="20" width="30"> <br>
+
+<br><a onclick="filters()">More filters</a><br>
+
+<div class="other" id="filters">
+
+Episodes<input id="episodesmin" value="1"><input id="episodesmax" value="500">
+
+Status <select id="statusselect">
+<option value="Any">Any</option>
+<option value="Finished Airing">Finished Airing</option>
+<option value="Currently Airing">Currently Airing</option>
+<option value="Not yet aired">Not yet aired</option>
+</select>
+Source <select id="sourceselect">
+<option value="Any">Any</option>
+<option value="Original">Original</option> <option value="Manga">Manga</option> <option value="4-koma">4-koma Manga</option> <option value="Web">Web Manga</option> <option value="Digital">Digital Manga</option> <option value="Novel">Novel</option> <option value="Light">Light Novel</option> <option value="Visual Novel">Visual</option> <option value="Game">Game</option> <option value="Card Game">Card</option> <option value="Book">Book</option> <option value="Picture Book">Picture</option> <option value="Radio">Radio</option> <option value="Music">Music</option> <option value="Other">Other</option> <option value="Unknown">Unknown</option>
+</select>
+Aired <select id="airedselect">
+<option value="Any">Any</option>
+<option value="2019">2019</option> <option value="2018">2018</option> <option value="2017">2017</option> <option value="2016">2016</option> <option value="2015">2015</option> <option value="2014">2014</option> <option value="2013">2013</option> <option value="2012">2012</option> <option value="2011">2011</option> <option value="2010">2010</option> <option value="2009">2009</option> <option value="2008">2008</option> <option value="2007">2007</option> <option value="2006">2006</option> <option value="2005">2005</option> <option value="2004">2004</option> <option value="2003">2003</option> <option value="2002">2002</option> <option value="2001">2001</option> <option value="2000">2000</option> <option value="1999">1999</option> <option value="1998">1998</option> <option value="1997">1997</option> <option value="1996">1996</option> <option value="1995">1995</option> <option value="1994">1994</option> <option value="1993">1993</option> <option value="1992">1992</option> <option value="1991">1991</option> <option value="1990">1990</option> <option value="1989">1989</option> <option value="1988">1988</option> <option value="1987">1987</option> <option value="1986">1986</option> <option value="1985">1985</option> <option value="1984">1984</option> <option value="1983">1983</option> <option value="1982">1982</option> <option value="1981">1981</option> <option value="1980">1980</option> <option value="1979">1979</option> <option value="1978">1978</option> <option value="1977">1977</option> <option value="1976">1976</option> <option value="1975">1975</option> <option value="1974">1974</option> <option value="1973">1973</option> <option value="1972">1972</option> <option value="1971">1971</option> <option value="1970">1970</option> <option value="1969">1969</option> <option value="1968">1968</option> <option value="1967">1967</option> <option value="1966">1966</option> <option value="1965">1965</option> <option value="1964">1964</option> <option value="1963">1963</option> <option value="1962">1962</option> <option value="1961">1961</option> <option value="1960">1960</option>
+</select><br>
+Producer <input type="text" id="producersearch"> Licensor <input type="text" id="licensorsearch"> Studio <input type="text" id="studiosearch"><br>
+Score <input id="scoremin" value="0.0"><input id="scoremax" value="10.0">  <br>Score Number <input id="scorenummin" value="1"><input id="scorenummax" value="2000000"><br>
+Ranked <input id="rankedmin" value="1"><input id="rankedmax" value="16000">  <br>Popularity <input id="popmin" value="1"><input id="popmax" value="16000"><br>
+Members <input id="membermin" value="1"><input id="membermax" value="2000000">  <br>Favorites <input id="favmin" value="0"><input id="favmax" value="150000"><br>
+</div>
+<div class="other">Page <input type="text" id="page" value="1" readonly> out of <input type="text" id="maxpage" readonly> with <input type="text" id="perpage" value="25" readonly> per page <input type="button" id="prevpage" value="prev"> <input type="button" id="nextpage" value="next"> </div><br>
+<table id="demo"></table>
+
+</body>
+</html>
